@@ -6,7 +6,7 @@ int main() {
 	cin.tie(0);
 
 	int N, cnt = 0;
-	int a, b, c;2
+	int a, b, c;
 
 	cin >> N;
 
