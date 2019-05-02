@@ -9,10 +9,10 @@ def self_num(n) :
             b = 0
             break
     return b
-chk = []
-for i in range(1,10002):
-    chk.append(0)
+
+chk = [0] * 10001
+
 for i in range(1,10001) :
+    chk[self_num(i)]= 1
     if chk[i] == 0 :
         print(i)
-    chk[self_num(i)]= 1
