@@ -9,6 +9,7 @@ int N, ma = 0;
 
 int foo(){
     iter = m.begin();
+    map <string,int> p;
     int width = iter->first, height = iter->second, ans = 0, tmp = 0;
     for(iter; iter != m.end(); iter++){
         if(iter->second == ma){ans += (iter->first-width)*height; break;}
