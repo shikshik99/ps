@@ -12,10 +12,8 @@ int solution(vector<int> priorities, int location) {
     
     pair<int,int> tmp;
     while(!q.empty()){
-        if(q.front().second == pq.top() && q.front().first == location){break;}
+        if(q.front().second == pq.top() && q.front().first == location){return answer + 1;}
         else if(q.front().second == pq.top()) {q.pop(); pq.pop();answer++;}
         else {tmp = q.front(); q.pop(); q.push(tmp);}
     }
-    
-    return answer + 1;
 }
