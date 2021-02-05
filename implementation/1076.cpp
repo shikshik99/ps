@@ -3,7 +3,7 @@
 #include <map>
 #include <vector>
 using namespace std;
-#define ll long long
+#define ll unsigned long long
 map <string, ll> A,B;
 vector <string>v;
 
@@ -17,7 +17,7 @@ void foo(){
     A["blue"] = 6; B["blue"] = 1000000;
     A["violet"] = 7; B["violet"] = 10000000;
     A["grey"] = 8; B["grey"] = 100000000;
-    A["white"] = 9; B["white"] = 100000000;
+    A["white"] = 9; B["white"] = 1000000000;
 }
 
 int main(){
