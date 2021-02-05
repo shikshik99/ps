@@ -8,8 +8,7 @@ vector <int> v, ans;
 stack <int> s;
 
 void foo(){
-    s.push(0);
-    for(int i = 1; i < N; i++){
+    for(int i = 0; i < N; i++){
         if(s.empty()) {s.push(i); continue;}
         else if(!s.empty() && v[s.top()] > v[i]){
             ans[i] = s.top() + 1;
