@@ -24,7 +24,7 @@ int solution(vector<vector<int>> jobs) {
         time += pq.top().first, ans.push_back(time - pq.top().second), pq.pop();
         if(i >= jobs.size()) break;
     }
-    while(!pq.empty()) time +   = pq.top().first, ans.push_back(time - pq.top().second), pq.pop();
+    while(!pq.empty()) time += pq.top().first, ans.push_back(time - pq.top().second), pq.pop();
     
     for(auto it : ans) answer += it;
     return answer / ans.size();
