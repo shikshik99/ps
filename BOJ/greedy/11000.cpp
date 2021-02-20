@@ -14,7 +14,7 @@ vector <pii>v;
 priority_queue <int, vector<int>, greater<>> pq;
 
 int main(){
-    int N, a, b, answer = 1, size;
+    int N, a, b;
     cin >> N;
     for(int i = 0; i < N; i++) cin >> a >> b, v.push_back({a,b});
     sort(v.begin(), v.end(), cmp);
