@@ -30,11 +30,12 @@ int main(){
         for(auto it : dq){
             if(it.first == x && it.second == y) {cout << cnt; return 0;}
         }
-        
+
         if(x < N && y < N && x >= 0 && y >= 0){
             if(v[x][y]) dq.push_front({x,y}), v[x][y] = 0;
             else dq.push_front({x,y}), dq.pop_back();
         }
+        
         if(m[cnt] == 'L'){
             direction--;
             if(direction < 0) direction += 4;
