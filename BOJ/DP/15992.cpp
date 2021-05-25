@@ -13,11 +13,12 @@ int foo(int num, int cnt){
     if(ret != -1) return ret;
 
     ret = 0;
+    /*여기 까지 고정*/
     for(int i = 1; i <= 3; i++){
         ret = (ret + foo(num-i, cnt - 1)) % mod;
     }
     
-    return ret;
+    return ret; // return값 고정
 }
 
 int main(){
