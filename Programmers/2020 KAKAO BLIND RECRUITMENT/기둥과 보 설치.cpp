@@ -33,7 +33,6 @@ bool check_roof(int i, int j){
 }
 
 void build_structure(int x, int y, int a){
-    // cout << x << ' ' <<  y << ' ' << a << '\n';
     if(!a){
         if(check_pillar(x,y)) arr[x][y] += 1;
     }
@@ -101,9 +100,5 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame) {
         cout << '\n';
     }
     sort(answer.begin(), answer.end(), compare);
-    // for(int i = 0; i < answer.size(); i++){
-    //     for(int j = 0; j < 3; j++) cout << answer[i][j] << ' ';
-    //     cout << '\n';
-    // }
     return answer;
 }
