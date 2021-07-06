@@ -1,54 +1,72 @@
 #include <iostream>
 #include <string>
-#include <map>
 #include <vector>
+#include <map>
+#include <algorithm>
 using namespace std;
 
-map <int, bool>m;
+int N, K;
 vector <string> v;
-int n, k, answer = 0;
+map <int, bool> m;
 
-void chk_string(){
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        cnt++;
-        for(int j = 0; j < v[i].length(); j++){
-            if(!m[v[i][j] - 'a']) {cnt--; break;}
-        }
+string foo(string str){
+    string tmp = "";
+    for(int i = 4; i < str.length() - 4; i++){
+        if(m[str[i] - 'a']) continue;
+        tmp += str[i];
     }
-    answer = answer > cnt ? answer : cnt;
-}
 
-void foo(int idx, int depth){
-    if(depth == k - 5){
-        chk_string();
-        return;
-    }
-    
-    for(int i = idx; i < 26; i++){
-        if(i == 0 || i == 2 || i== 8 || i == 13 || i == 19) continue;
-        m[i] = true;
-        foo(i + 1, depth + 1);
-        m[i] = false;
-    }
-}
-
-string wood_cutting(string str){
-    string tmp;
-    for(int i = 4; i < str.length() - 4; i++) tmp += str[i];
     return tmp;
 }
 
-int main(){
-    for(int i = 0; i < 26; i++) m[i] = false;
-    m[0] = true, m[2] = true, m[8] = true, m[13] = true, m[19] = true;
-    
-    cin >> n >> k;
-    v.resize(n);
-    for(int i = 0; i < n; i++) cin >> v[i], v[i] = wood_cutting(v[i]);
-    if(k < 5) {cout << 0; return 0;}
-    
-    foo(0, 0);
+int chk_cnt(){
+    int cnt = 0;
+    for(int i = 0; i < v.size(); i++){
+        for(int j = 0; j < v[i].length(); j++){
+            if(!m[v[i][j] - 'a']) {cnt--; break;}
+        }
+        cnt++;
+    }
 
-    cout << answer;
+    return cnt;
+}
+
+int combination(int idx, int depth){
+    if(depth == K){
+        return chk_cnt();
+    }
+
+    int cnt = 0;
+    for(int i = idx; i < 26; i++){
+        if(m[i]) continue;
+        m[i] = true;
+        cnt = max(combination(i + 1, depth + 1), cnt);
+        m[i] = false;
+    }
+
+    return cnt;
+}
+
+int main(){
+    string str;
+    int answer = 0;
+    cin >> N >> K;
+    
+    for(int i = 0; i < 26; i++) m[i] = false;
+    m['a' - 'a'] = true, m['n' - 'a'] = true, m['t' - 'a'] = true, m['i' - 'a'] = true, m['c' - 'a'] = true;
+    
+    for(int i = 0; i < N; i++){
+        cin >> str;
+        v.push_back(foo(str));
+    }
+
+    if(K < 5) {cout << "0\n"; return 0;}
+
+    K -= 5;
+
+    for(int i = 0; i < 26 - (K - 1); i++){
+        answer = max(answer, combination(i, 0));
+    }
+
+    cout << answer << '\n';
 }
