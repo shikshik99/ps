@@ -1,53 +1,63 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <vector>
+#include <algorithm>
 using namespace std;
 #define pii pair<int, int>
+#define MAX 0x6f6f6f6f
 
-vector <pii> house, chick;
+vector <pii> info, home;
 int board[51][51];
-bool combi[13];
-int N, M, answer = 0x6f6f6f6f;
+bool chk[13];
+int N, M;
 
-int foo(){
-    int tmp = 0, dist;
-    for(int i = 0; i < house.size(); i++){
-        dist = 0x6f6f6f6f;
-        for(int j = 0; j < chick.size(); j++){
-            if(!combi[j]) continue;
-            dist = min(dist, abs(house[i].first - chick[j].first) + abs(house[i].second - chick[j].second));
+int calc_dist(){
+    int tmp, ret = 0;
+    for(int i = 0; i < home.size(); i++){
+        tmp = MAX;
+        for(int j = 0; j < info.size(); j++){
+            if(!chk[j]) continue;
+            int cal = abs(home[i].first - info[j].first) + abs(home[i].second - info[j].second);
+            tmp = tmp < cal ? tmp : cal;
         }
-        tmp += dist;
+        ret += tmp;
     }
-    return tmp;
+    
+    return ret;
 }
 
-void combination(int idx, int depth, int max){
-    if(depth == max){
-        answer = min(answer, foo()); return;
+int combination(int idx, int depth){
+    int answer = calc_dist();
+    if(depth == M) return answer;
+
+    for(int i = idx; i < info.size(); i++){
+        chk[i] = true;
+        answer = min(answer, combination(i + 1, depth + 1));
+        chk[i] = false;
     }
-    for(int i = idx; i < chick.size(); i++){
-        if(combi[i]) continue;
-        combi[i] = true;
-        combination(i, depth + 1, max);
-        combi[i] = false;
-    }
+    
+    return answer;
 }
 
 int main(){
-    memset(combi, false, sizeof(combi));
+    memset(chk, false, sizeof(chk));
+
     cin >> N >> M;
     for(int i = 0; i < N; i++){
-        for(int j = 0; j < N; j++){
+        for(int j = 0; j < N; j++) {
             cin >> board[i][j];
-            if(board[i][j] == 1) house.push_back({i,j});
-            if(board[i][j] == 2) chick.push_back({i,j});
+            if(board[i][j] == 1) home.push_back({i,j});
+            if(board[i][j] == 2) info.push_back({i,j});
         }
     }
-    for(int i = 1; i <= M; i++){
-        combination(0,0,i);
+
+    int answer = MAX;
+    for(int i = 0; i < info.size() - (M - 1); i++){
+        chk[i] = true;
+        answer = min(answer, combination(i, 0));
+        chk[i] = false;
     }
-    cout << answer;
+
+    cout << answer << '\n';
 }
