@@ -2,32 +2,34 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
+#define ll long long
 
-vector <int>v;
-int N, M, ma = 0;
+vector <ll> v;
+ll N, M;
 
-int foo(){
-    int l = 0, r = ma, mid;
-    long long sum = 0;
-    while(l<=r){
-        sum = 0;
-        mid = (l+r)/2;
-        for(int i = 0; i < N; i++){
-            if(v[i] <= mid) continue;
-            else sum += (v[i]-mid);
-        }
-        if(sum < M) r = mid - 1;
-        else if (sum > M) l = mid + 1;
-        else return mid;
+ll get_wood(ll num){
+    ll ret = 0;
+    for(int i = 0; i < N; i++){
+        if(v[i] > num) ret += (v[i] - num);
     }
-    return r;
+
+    return ret;
 }
 
 int main(){
     cin >> N >> M;
     v.resize(N);
-    for(int i = 0; i < N; i++) {cin >> v[i]; ma = max(ma, v[i]);}
+    for(int i = 0; i < N; i++) cin >> v[i];
+
     sort(v.begin(), v.end());
-    int ans = foo();
-    cout << ans;
+
+    ll l = 0, r = v[N - 1], mid, ret;
+    while(l <= r){
+        mid = (l + r) / 2;
+        ret = get_wood(mid);
+        if(ret < M) r = mid - 1;
+        else l = mid + 1;
+    }
+    
+    cout << r << '\n';
 }
