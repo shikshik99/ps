@@ -1,33 +1,28 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
 
-vector <int> v, a;
-
-int foo(int num){
-    int l = 0, r = v.size() - 1, mid;
-    while(l <= r){
-        mid = (l + r) / 2;
-        if(v[mid] < num) l = mid + 1;
-        else if(v[mid] == num) return 1;
-        else r = mid - 1;
-    }
-
-    return 0;
-}
+int arr[100001];
 
 int main(){
-    int N, M, tmp;
+    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int N, M;
     cin >> N;
-    while(N--) cin >> tmp, v.push_back(tmp);
-
-    sort(v.begin(), v.end());
+    for(int i = 0; i < N; i++) cin >> arr[i];
+    sort(arr, arr + N);
     
     cin >> M;
-    while(M--) cin >> tmp, a.push_back(tmp);
-
-    for(int i = 0; i < a.size(); i++){
-        cout << foo(a[i]) << '\n';
+    while(M--){
+        int num, l = 0, r = N - 1, mid, ans = 0;
+        cin >> num;
+        while(l <= r){
+            mid = (l + r) / 2;
+            if(arr[mid] < num) l = mid + 1;
+            else if(arr[mid] == num){
+                ans = 1; break;
+            }
+            else r = mid - 1;
+        }
+        cout << ans << '\n';
     }
 }
