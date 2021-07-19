@@ -9,9 +9,9 @@ int N, K;
 vector <string> v;
 map <int, bool> m;
 
-string foo(string str){
+string REMOVE(string str){
     string tmp = "";
-    for(int i = 4; i < str.length() - 4; i++){
+    for(int i = 4; i < str.length() - 4; i++) {
         if(m[str[i] - 'a']) continue;
         tmp += str[i];
     }
@@ -19,7 +19,7 @@ string foo(string str){
     return tmp;
 }
 
-int chk_cnt(){
+int chk(){
     int cnt = 0;
     for(int i = 0; i < v.size(); i++){
         for(int j = 0; j < v[i].length(); j++){
@@ -32,38 +32,37 @@ int chk_cnt(){
 }
 
 int combination(int idx, int depth){
+    int answer = 0;
     if(depth == K){
-        return chk_cnt();
-    }
-
-    int cnt = 0;
+        return chk();
+    }   
+    
     for(int i = idx; i < 26; i++){
         if(m[i]) continue;
         m[i] = true;
-        cnt = max(combination(i + 1, depth + 1), cnt);
+        answer = max(answer, combination(i + 1, depth + 1));
         m[i] = false;
-    }
+    } 
 
-    return cnt;
+    return answer;
 }
 
 int main(){
     string str;
     int answer = 0;
+
     cin >> N >> K;
-    
     for(int i = 0; i < 26; i++) m[i] = false;
     m['a' - 'a'] = true, m['n' - 'a'] = true, m['t' - 'a'] = true, m['i' - 'a'] = true, m['c' - 'a'] = true;
-    
+
     for(int i = 0; i < N; i++){
         cin >> str;
-        v.push_back(foo(str));
+        v.push_back(REMOVE(str));
     }
 
-    if(K < 5) {cout << "0\n"; return 0;}
-
+    if(K < 5) cout << 0 << '\n', exit(0);
     K -= 5;
-
+    
     for(int i = 0; i < 26 - (K - 1); i++){
         answer = max(answer, combination(i, 0));
     }
