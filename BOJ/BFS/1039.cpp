@@ -1,36 +1,40 @@
 #include <iostream>
+#include <cstring>
 #include <queue>
 #include <string>
-#include <cstring>
+#include <algorithm>
 using namespace std;
-#define psi pair<string, int>
+using psi = pair<string, int>;
 
-int K;
 bool chk[1000001][11];
-string N;
+string str;
+int K;
+
+string SWAP(string tmp, int i, int j){
+    swap(tmp[i], tmp[j]);
+    return tmp;
+}
 
 int BFS(){
-    memset(chk, false, sizeof(chk));
-    queue <psi>q;
-    q.push({N, 0});
-
     int answer = -1;
-    while(!q.empty()){
-        string tmp = q.front().first;
-        int cnt = q.front().second + 1; 
-        q.pop();
-        if(cnt > K) {
-            answer = max(answer, stoi(tmp));
-            continue;
-        }
+    memset(chk, false, sizeof(chk));
+    queue <psi> q;
+    q.push({str, 0});
+    chk[stoi(str)][0] = true;
 
+    while(!q.empty()){
+        string tmp = q.front().first, swp;
+        int cnt = q.front().second + 1;
+        q.pop();
         for(int i = 0; i < tmp.length(); i++){
             for(int j = i + 1; j < tmp.length(); j++){
-                string str = tmp;
-                swap(str[i], str[j]);
-                if(str[0] == '0' || chk[stoi(str)][cnt]) continue;
-                chk[stoi(str)][cnt] = true;
-                q.push({str, cnt});
+                swp = SWAP(tmp, i, j);
+                if(swp[0] == '0' || chk[stoi(swp)][cnt]) continue;
+                if(cnt == K) answer = max(answer, stoi(swp));
+                else{
+                    chk[stoi(swp)][cnt] = true;
+                    q.push({swp, cnt});
+                }
             }
         }
     }
@@ -39,7 +43,6 @@ int BFS(){
 }
 
 int main(){
-    cin >> N >> K;
-
+    cin >> str >> K;
     cout << BFS();
 }
