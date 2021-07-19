@@ -2,20 +2,21 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
+using pii = pair<int, int>;
 
-struct student{
-    int recom = 0;
-    int duration = 0;
-};
+vector <pii> frame;
+vector <int> student;
+int N, M;
 
-vector <student> v;
-int arr[21] = {0,};
-int N, K;
+void foo(){
+    for(int i = 0; i < N; i++) frame[i].second++;
+}
 
-bool chk_exist(int tmp){
+bool blank(int idx){
     for(int i = 0; i < N; i++){
-        if(arr[i] == tmp) {
-            v[tmp].recom++; 
+        if(frame[i].first == -1){
+            frame[i].first = idx, frame[i].second = 0;
+            foo();
             return true;
         }
     }
@@ -23,43 +24,52 @@ bool chk_exist(int tmp){
     return false;
 }
 
-void find_place(int new_idx){
-    if(chk_exist(new_idx)) return;
-    
-    v[new_idx].recom = 1;
-
-    int cnt = 10000, du = 0, tmp, idx, ii;
+bool chk_exist(int idx){
     for(int i = 0; i < N; i++){
-        if(!arr[i]) {
-            arr[i] = new_idx;
-            return;
+        if(frame[i].first == idx) {
+            foo();
+            return true;
         }
-        tmp = arr[i];
-        if(v[tmp].recom < cnt) cnt = v[tmp].recom, du = v[tmp].duration, idx = tmp, ii = i;
-        else if(v[tmp].recom == cnt && v[tmp].duration > du) cnt = v[tmp].recom, du = v[tmp].duration, idx = tmp, ii = i;
     }
-    v[idx].duration = 0, v[idx].recom = 0;
-    arr[ii] = new_idx;
+
+    return false;
+}
+
+void recommend(int idx){
+    pii tmp = frame[0];
+    int ii = 0;
+    for(int i = 1; i < N; i++){
+        if(student[frame[i].first] < student[tmp.first]) tmp = frame[i], ii = i;
+        else if(student[frame[i].first] == student[tmp.first]){
+            if(frame[i].second > tmp.second) tmp = frame[i], ii = i;
+        }
+    }
+
+    student[tmp.first] = 0;
+    frame[ii].first = idx, frame[ii].second = 0;
+}
+
+bool cmp(pii a, pii b){
+    return a.first < b.first ? true : false;
 }
 
 int main(){
-    v.resize(101);
+    cin >> N >> M;
+    student.resize(101, 0);
+    frame.resize(N);
+    for(int i = 0; i < N; i++) frame[i].first = -1;
 
     int tmp;
-    cin >> N >> K;
-    
-    for(int i = 0; i < K; i++){
+    for(int i = 0; i < M; i++){
         cin >> tmp;
-        find_place(tmp);
-        for(int i = 0; i < N; i++) {
-            v[arr[i]].duration++;
-        }
+        student[tmp]++;
+        if(chk_exist(tmp)) continue;
+        if(blank(tmp)) continue;
+        recommend(tmp);
+        foo();
     }
-    
-    vector <int> answer;
-    for(int i = 0; i < N; i++){
-        answer.push_back(arr[i]);
-    }
-    sort(answer.begin(), answer.end());
-    for(auto it : answer) cout << it << ' ';
+
+    sort(frame.begin(), frame.end(), cmp);
+    for(auto it : frame) cout << it.first << ' ';
+    cout << '\n';
 }
