@@ -1,35 +1,31 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
-#define ll long long
+using ll = long long;
 
-vector <ll> v;
-ll N, M;
+int N, M;
+ll arr[1000001];
 
-ll get_wood(ll num){
+ll wood(ll tmp){
     ll ret = 0;
     for(int i = 0; i < N; i++){
-        if(v[i] > num) ret += (v[i] - num);
+        if(arr[i] > tmp)
+            ret += (arr[i] - tmp);
     }
-
     return ret;
 }
 
 int main(){
     cin >> N >> M;
-    v.resize(N);
-    for(int i = 0; i < N; i++) cin >> v[i];
+    for(int i = 0; i < N; i++) cin >> arr[i];
+    sort(arr, arr + N);
 
-    sort(v.begin(), v.end());
-
-    ll l = 0, r = v[N - 1], mid, ret;
+    ll l = 0, r = arr[N - 1], mid, tmp;
     while(l <= r){
         mid = (l + r) / 2;
-        ret = get_wood(mid);
-        if(ret < M) r = mid - 1;
+        tmp = wood(mid);
+        if(tmp < M) r = mid - 1;
         else l = mid + 1;
     }
-    
     cout << r << '\n';
 }
