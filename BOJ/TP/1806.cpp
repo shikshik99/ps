@@ -1,25 +1,24 @@
 #include <iostream>
 using namespace std;
-#define ll long long
+#define MAX 0x6f6f6f6f
+using ll = long long;
 
 ll arr[100001];
+int N, S;
 
 int main(){
-    int N, S;
     cin >> N >> S;
-
     for(int i = 0; i < N; i++) cin >> arr[i];
-    if(!S) cout << 1 << '\n', exit(0);
-
-    ll start = 0, end = 0, answer = 0x7f7f7f7f, sum = 0;
-    while(end <= N){
-        if(sum < S) sum += arr[end], end++;
-        else{
-            answer = answer < (end - start) ? answer : (end - start);
-            sum -= arr[start], start++;
+    int l = 0, r = 0;
+    ll sum = 0, answer = MAX;
+    while(r <= N){
+        if(sum < S) sum += arr[r++];
+        else {
+            answer = answer < (r - l) ? answer : (r - l);
+            sum -= arr[l++];
         }
     }
-    
-    if(answer == 0x7f7f7f7f) cout << 0 << '\n';
-    else cout << answer << '\n';
+
+    if(answer == MAX) cout << 0 << '\n', exit(0);
+    cout << answer << '\n';
 }
