@@ -1,25 +1,22 @@
 #include <iostream>
 #include <cstring>
 using namespace std;
-#define ll long long
+using ll = long long;
 
-ll D[91];
+ll D[91] = {0,};
 
-ll foo(int tmp){
-    if(D[tmp] != -1) return D[tmp];
+ll foo(int num){
+    ll &ret = D[num];
+    if(ret != -1) return ret;
 
-    ll &ret = D[tmp];
-    ret = 0;
-
-    ret = foo(tmp - 2) + foo(tmp - 1);
+    ret = foo(num - 1) + foo(num - 2);
 
     return ret;
 }
 
 int main(){
     memset(D, -1, sizeof(D));
-    int N;
-    cin >> N;
-    D[0] = 0, D[1] = 1;
+    D[0] =  0, D[1] = 1;
+    int N; cin >> N;
     cout << foo(N);
 }
