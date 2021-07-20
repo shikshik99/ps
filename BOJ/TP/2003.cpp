@@ -1,21 +1,19 @@
 #include <iostream>
-#include <algorithm>
 using namespace std;
-#define ll long long
 
-ll arr[10001];
+int arr[10001];
 
 int main(){
-    ll N, M;
+    int N, M;
     cin >> N >> M;
-
     for(int i = 0; i < N; i++) cin >> arr[i];
-
-    ll start = 0, end = 0, answer = 0, sum = 0;
-    while(end <= N){
-        if(sum < M) sum += arr[end], end++;
-        else sum -= arr[start], start++;
+    
+    int l = 0, r = 0, sum = 0;
+    int answer = 0;
+    while(r <= N){
         if(sum == M) answer++;
+        if(sum > M) sum -= arr[l], l++;
+        else sum += arr[r], r++;
     }
 
     cout << answer << '\n';
