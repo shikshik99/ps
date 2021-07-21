@@ -3,47 +3,48 @@
 #include <string>
 using namespace std;
 
-stack <int> s;
+stack<int> s;
+int N;
 
-void TOP(){
-    if(s.empty()) cout << -1 << '\n';
-    else cout << s.top() << '\n';
-}
-
-void EMPTY(){
-    if(s.empty()) cout << 1 << '\n';
-    else cout << 0 << '\n';
-}
-
-void SIZE(){
-    cout << s.size() << '\n';
-}
-
-void POP(){
-    if(s.empty()) {
-        cout << -1 << '\n'; return;
+void cmd(int flag, int num){
+    switch (flag)
+    {
+    case 0:
+        s.push(num);
+        break;
+    case 1:
+        if(s.empty()) cout << -1 << '\n';
+        else cout << s.top() << '\n', s.pop();
+        break;
+    case 2:
+        cout << s.size() << '\n';
+        break;
+    case 3:
+        cout << s.empty() << '\n';
+        break;
+    case 4:
+        if(s.empty()) cout << -1 << '\n';
+        else cout << s.top() << '\n';
+        break;
+    default:
+        break;
     }
-    cout << s.top() << '\n', s.pop();
-}
-
-void PUSH(int num){
-    s.push(num);
 }
 
 int main(){
-    string str, num;
-    int N;
     cin >> N;
-
+    string str;
+    int flag, num;   
     while(N--){
         cin >> str;
-        if(str == "push"){
+        if(str == "push") {
             cin >> num;
-            PUSH(stoi(num));
+            flag = 0;
         }
-        else if(str == "pop") POP(); 
-        else if(str == "size") SIZE();
-        else if(str == "empty") EMPTY();
-        else if(str == "top") TOP();
+        else if(str == "pop") flag = 1;
+        else if(str == "size") flag = 2;
+        else if(str == "empty") flag = 3;
+        else if(str == "top") flag = 4;
+        cmd(flag, num);
     }
 }
