@@ -1,10 +1,8 @@
 #include <iostream>
-#include <vector>
 #define MAX 1000001
 using namespace std;
 
 int tree[MAX * 4] = {0, };
-int ret;
 
 void update(int start, int end, int node, int index, int dif){
     if(index < start || index > end) return;
@@ -16,7 +14,8 @@ void update(int start, int end, int node, int index, int dif){
 }
 
 int Q(int start, int end, int node, int cnt){
-    if(start == end && !ret) {
+    int ret;
+    if(start == end) {
         cout << start << '\n';
         return start;
     }
@@ -41,7 +40,6 @@ int main(){
         cin >> a;
         if(a == 1) {
             cin >> b;
-            ret = 0;
             int tmp = Q(1, MAX - 1, 1, b);
             update(1, MAX - 1, 1, tmp, - 1);
         }
@@ -49,6 +47,5 @@ int main(){
             cin >> b >> c;
             update(1, MAX - 1, 1, b, c);
         }
-
     }
 }
