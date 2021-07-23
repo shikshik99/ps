@@ -1,17 +1,15 @@
 #include <iostream>
-#include <cstring>
 #include <string>
 #include <cmath>
 #define MAX 1000000
 using namespace std;
 using pii = pair<int, int>;
 
-bool chk[MAX + 1];
+bool chk[MAX + 1] = {false, };
 string P;
 int K;
 
 void chk_prime(){
-    memset(chk, false, sizeof(chk));
     int len = sqrt(MAX);
     for(int i = 2; i <= len; i++){
         if(chk[i]) continue;
