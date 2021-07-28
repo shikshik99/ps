@@ -25,9 +25,10 @@ int main(){
 
     for(int i = 0; i < N; i++){
         for(int j = 1; j <= N; j++){
+            if(dist[j] == INF) continue;
             for(auto it : graph[j]){
                 int next = it.first, cost = it.second;
-                if(dist[j] != INF && dist[j] + cost < dist[next]){
+                if(dist[j] + cost < dist[next]){
                     if(i == N - 1) cout << -1 << '\n', exit(0);
                     dist[next] = dist[j] + cost;
                 }
