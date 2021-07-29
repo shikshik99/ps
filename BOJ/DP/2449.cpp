@@ -12,17 +12,16 @@ int foo(int start, int end){
     int &ret = D[start][end];
     if(ret != -1) return ret;
 
-    ret = 0;
-    int ans = INF;
+    ret = INF;
     for(int i = start; i < end; i++){
         int left = foo(start, i);
         int right = foo(i + 1, end);
         int cost = 0;
         if(arr[start] != arr[i + 1]) cost++;
-        ans = min(ans, left + right + cost);
+        ret = min(ret, left + right + cost);
     }
     
-    return ret = ans;
+    return ret;
 }
 
 int main(){
