@@ -1,68 +1,43 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <string>
+#define INF 0x7f7f7f7f;
 using namespace std;
 
-vector <string> chess;
 vector <string> v;
-int answer = 0x7f7f7f7f;
+int N, M;
 
-void BLACK(int x, int y){
-    int tmp = 0;
-    v.clear();
-    v.resize(8);
-    for(int i = x; i < x+8; i++){
-        for(int j = y; j < y+8; j++){
-            v[tmp].push_back(chess[i][j]);
+int foo(int x, int y, char ch){
+    int ret = 0;
+    char ch2 = 'B';
+    if(ch == 'B') ch2 = 'W';
+    
+    for(int i = x; i < x + 8; i++){
+        for(int j = y; j < y + 8; j++){
+            if(v[i][j] != ch) ret++;
+            swap(ch, ch2);
         }
-        tmp++;
+        swap(ch, ch2);
     }
-    tmp = 0;
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++){
-            if(!(i % 2) && !(j % 2) && v[i][j] == 'W') tmp++;
-            else if(!(i % 2) && (j % 2) == 1 && v[i][j] == 'B') tmp++;
-            else if((i % 2) == 1 && !(j % 2) && v[i][j] == 'B') tmp++;
-            else if((i % 2) == 1 && (j % 2) == 1 && v[i][j] == 'W') tmp++;
-        }
-    }
-    tmp = tmp < 64 - tmp ? tmp : 64 - tmp;
-    answer = answer < tmp ? answer : tmp;
-}
-
-void WHITE(int x, int y){
-    int tmp = 0;
-    v.clear();
-    v.resize(8);
-    for(int i = x; i < x+8; i++){
-        for(int j = y; j < y+8; j++){
-            v[tmp].push_back(chess[i][j]);
-        }
-        tmp++;
-    }
-    tmp = 0;
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++){
-            if(!(i % 2) && !(j % 2) && v[i][j] == 'B') tmp++;
-            else if(!(i % 2) && (j % 2) == 1 && v[i][j] == 'W') tmp++;
-            else if((i % 2) == 1 && !(j % 2) && v[i][j] == 'W') tmp++;
-            else if((i % 2) == 1 && (j % 2) == 1 && v[i][j] == 'B') tmp++;
-        }
-    }
-    tmp = tmp < 64 - tmp ? tmp : 64 - tmp;
-    answer = answer < tmp ? answer : tmp;
+    return ret;
 }
 
 int main(){
-    int N, M;
+    string str;
     cin >> N >> M;
-    chess.resize(N);
-    for(int i = 0; i < N; i++) cin >> chess[i];
-    for(int i = 0; i <= N - 8; i++){
-        for(int j = 0; j <= M - 8; j++){
-            if(chess[i][j] == 'B') BLACK(i, j);
-            else WHITE(i,j);
+    for(int i = 0; i < N; i++){
+        cin >> str;
+        v.push_back(str);
+    }
+    
+    int answer = INF;
+    for(int i = 0; i < N - 7; i++){
+        for(int j = 0; j < M - 7; j++){
+            answer = min(answer, foo(i, j, 'B'));
+            answer = min(answer, foo(i, j, 'W'));
         }
     }
-    cout << answer;
+
+    cout << answer << '\n';
 }
