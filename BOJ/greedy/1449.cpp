@@ -1,21 +1,21 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
 
-vector <int>v;
+int arr[1001];
 
 int main(){
-    int N, L, answer = 1;
+    int N, L;
     cin >> N >> L;
-    v.resize(N);
-    for(int i = 0; i < N; i++) cin >> v[i];
-    sort(v.begin(), v.end());
-    int tmp = L - 1;
-    for(int i = 1; i < N; i++){
-        if(!tmp) {tmp = L - 1, answer++; continue;}
-        if(v[i] - v[i-1] <= tmp) tmp -= (v[i] - v[i-1]);
-        else tmp = L - 1, answer++;
+    for(int i = 0; i < N; i++) cin >> arr[i];
+    sort(arr, arr + N);
+    
+    int tmp, idx = 0, ans = 0;
+    while(idx < N){
+        tmp = arr[idx] + L;
+        while(idx < N && arr[idx] < tmp) idx++;
+        ans++;
     }
-    cout << answer;
+
+    cout << ans << '\n';
 }
