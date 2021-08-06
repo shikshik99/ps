@@ -1,18 +1,15 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
-vector <int>v;
+int arr[11];
+int N, K, answer;
 
 int main(){
-    int N, K, answer = 0;
     cin >> N >> K;
-    v.resize(N);
-    for(int i = 0; i < N; i++) cin >> v[i];
-    sort(v.begin(), v.end(), greater<>());
-    for(int i = 0; i < N; i++){
-        if(K/v[i]) answer += K/v[i], K %= v[i];
+    for(int i = 0; i < N; i++) cin >> arr[i];
+    for(int i = N - 1; i >= 0; i--){
+        answer += (K / arr[i]);
+        K %= arr[i];
     }
-    cout << answer;
+    cout << answer << '\n';
 }
