@@ -2,25 +2,25 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
-#define ll long long
-#define pii pair<ll,ll>
+using pii = pair<int, int>;
+
+vector <pii> v;
 
 bool cmp(pii a, pii b){
     if(a.second == b.second) return a.first < b.first ? true : false;
     return a.second < b.second ? true : false;
 }
 
-vector <pii> v;
-
 int main(){
-    int N, a, b, answer = 1; 
+    int N;
     cin >> N;
-    for(int i = 0; i < N; i++) cin >> a >> b, v.push_back({a,b});
+    v.resize(N);
+    for(int i = 0 ; i < N ; i++) cin >> v[i].first >> v[i].second;
     sort(v.begin(), v.end(), cmp);
-    b = v[0].second;
-    for(int i = 1; i < N; i++){
-        if(v[i].first >= b) b = v[i].second, answer++;
+    int idx = 1, answer = 1, tmp = v[0].second;
+    while(idx < N){
+        if(v[idx].first >= tmp) tmp = v[idx].second, answer++;
+        idx++;
     }
-
-    cout << answer;
+    cout << answer << '\n';
 }
