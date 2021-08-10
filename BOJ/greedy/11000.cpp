@@ -1,27 +1,39 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
 #include <queue>
 using namespace std;
-#define pii pair<int, int>
+using pii = pair <int, int>;
+
+struct compa{
+    bool operator()(int a, int b){
+        return a > b ? true : false;
+    }
+};
+
+priority_queue <int, vector<int>, compa> pq;
+vector <pii> v;
+int N;
 
 bool cmp(pii a, pii b){
     if(a.first == b.first) return a.second < b.second ? true : false;
     return a.first < b.first ? true : false;
 }
 
-vector <pii>v;
-priority_queue <int, vector<int>, greater<>> pq;
-
 int main(){
-    int N, a, b;
+    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+
     cin >> N;
-    for(int i = 0; i < N; i++) cin >> a >> b, v.push_back({a,b});
+    
+    pii tmp;
+    for(int i = 0; i < N; i++) cin >> tmp.first >> tmp.second, v.push_back(tmp);
     sort(v.begin(), v.end(), cmp);
-    pq.push(v[0].second);
-    for(int i = 1; i < N; i++){
-        if(pq.top() <= v[i].first) pq.pop();
-        pq.push(v[i].second);
+
+    for(int i = 0; i < N; i++){
+        tmp = v[i];
+        if (!pq.empty() && pq.top() <= tmp.first) pq.pop();
+        pq.push(tmp.second);
     }
-    cout << pq.size();
+
+    cout << pq.size() << '\n';
 }
