@@ -1,37 +1,65 @@
 #include <iostream>
-#include <vector>
+#include <algorithm>
+#define MAX 101
+#define INF 0x6f6f6f6f
 using namespace std;
-#define pii pair<int, int>
+using pii = pair <int, int>;
 
-vector <int> v;
-vector <int> elec;
+int swp[MAX];
+int multi[MAX];
+int use[MAX];
+int N, K;
+
+bool chk_use(int num){
+    for(int i = 0; i < N; i++){
+        if(multi[i] == num) return true;
+    }
+
+    return false;
+}
+
+int chk_empty(){
+    for(int i = 0; i < N; i++){
+        if(!multi[i]) return i;
+    }
+    return -1;
+}
+
+int find_pos(int idx){
+    fill(swp, swp + N, INF);
+    pii ret;
+    ret.first = -1, ret.second = -1;
+    for(int i = 0; i < N; i++){
+        for(int j = idx; j < K; j++){
+            if(multi[i] == use[j]) {
+                swp[i] = j;
+                break;
+            }
+        }
+        if(ret.second < swp[i]) ret.first = i, ret.second = swp[i];
+    }
+
+    return ret.first;
+}
 
 int main(){
-    int N, K, answer = 0, idx = 0;
-    bool flag = false;
-    pii tmp;
     cin >> N >> K;
-    v.resize(N, 0), elec.resize(K);
-    for(int i = 0; i < K; i++) cin >> elec[i];
+    for(int i = 0; i < K; i++) cin >> use[i];
 
-    for(int i = 0; i < K; i++){
-        tmp.first = tmp.second = 0;
-        flag = false;
-        for(int j = 0; j < N; j++){
-            if(v[j] == elec[i]) {flag = true; break;}
-            if(!v[j]) {v[j] = elec[i]; flag = true; break;}
+    int num, answer = 0;
+    pii due, tmp;
+    for(int i = 0; i < K; i++) {
+        num = use[i];
+        if(chk_use(num)) continue;
+
+        int idx = chk_empty();
+        if(idx != -1) {
+            multi[idx] = num;
+            continue;
         }
-        if(flag) continue;
-        for(int j = 0; j < N; j++){
-            idx = i + 1;
-            while(idx < K && elec[idx] != v[j]) idx++;
-            if(idx == K) {v[j] = elec[i]; answer++; flag = true; break;}
-            if(tmp.second < idx) tmp.first = elec[idx], tmp.second = idx;
-        }
-        if(flag) continue;
-        for(int j = 0; j < N; j++){
-            if(tmp.first == v[j]) {v[j] = elec[i]; answer++; flag = true; break;}
-        }
+        idx = find_pos(i);
+        multi[idx] = num;
+        answer++;
     }
 
     cout << answer << '\n';
