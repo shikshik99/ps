@@ -1,33 +1,38 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#define MAX 1001
 using namespace std;
-#define pii pair<int, int>
+using pii = pair <int, int>;
 
-vector <pii>v;
-vector <int>score;
+bool days[MAX];
+vector <pii> v;
+int N;
 
 bool cmp(pii a, pii b){
     if(a.second == b.second) return a.first > b.first ? true : false;
     return a.second > b.second ? true : false;
 }
 
+bool chk_possible(int idx){
+    pii tmp = v[idx];
+    for(int i = tmp.first; i >= 1; i--){
+        if(!days[i]) return days[i] = true;
+    }
+
+    return false;
+}
+
 int main(){
-    int N, answer = 0, cnt;
     cin >> N;
-    v.resize(N), score.resize(1001, 0);
+    v.resize(N);
     for(int i = 0; i < N; i++) cin >> v[i].first >> v[i].second;
     sort(v.begin(), v.end(), cmp);
-    for(int i = 0; i < v.size(); i++){
-        if(score[v[i].first]){
-            cnt = v[i].first;
-            while(cnt){
-                if(!score[cnt]) {score[cnt] = v[i].second; break;}
-                cnt--;
-            }
-        }
-        else score[v[i].first] = v[i].second;
+
+    int answer = 0;
+    for(int i = 0; i < N; i++){
+        if(chk_possible(i)) answer += v[i].second;
     }
-    for(auto it : score) answer += it;
-    cout << answer; 
+
+    cout << answer << '\n';
 }
