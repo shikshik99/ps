@@ -1,40 +1,42 @@
 #include <iostream>
-#include <vector>
-#include <string>
+#define MAX 64
 using namespace std;
 
-vector <vector<int>>v;
-vector <int> answer;
+int board[MAX][MAX];
 int N;
 
-void DAC(int x, int y, int level){
-    int size = N >> level;
-    int pivot = v[x][y];
-    for(int i = x; i < x + size; i++){
-        for(int j = y; j < y + size; j++){
-            if(pivot != v[i][j]){
-                cout << '(';
-                int nsize = N >> (level + 1);
-                for(int a = x; a < x + size; a += nsize){
-                    for(int b = y; b < y + size; b += nsize){
-                        DAC(a, b, level + 1);
-                    }
-                }
-                cout << ')';
-                return ;
-            }
+bool chk_board(int x, int y, int len){
+    int pivot = board[x][y];
+    for(int i = x; i < x + len; i++){
+        for(int j = y; j < y + len; j++){
+            if(board[i][j] != pivot) return false;
         }
     }
-    cout << pivot;
+
+    return true;
+}
+
+void foo(int x, int y, int len){
+    if(chk_board(x, y, len)){
+        cout << board[x][y];
+        return ;
+    }
+
+    int tmp = len / 2;
+    cout << '(';
+    for(int i = x; i < x + len; i += tmp){
+        for(int j = y; j < y + len; j += tmp){
+            foo(i, j, tmp);
+        }
+    }
+    cout << ')';
 }
 
 int main(){
     cin >> N;
-    string str;
-    v.resize(N);
     for(int i = 0; i < N; i++){
-        v[i].resize(N), cin >> str;
-        for(int j = 0; j < N; j++) v[i][j] = str[j]-'0';
-    }    
-    DAC(0,0,0); 
+        for(int j = 0; j < N; j++) scanf("%1d", &board[i][j]);
+    }
+
+    foo(0, 0, N);
 }
