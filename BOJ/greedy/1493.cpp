@@ -1,34 +1,35 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
-#include <cmath>
+#include <vector>
 using namespace std;
+using pii = pair <int, int>;
+using ll = long long;
 
-int main() {
-    int len, wid, hei;
-    cin >> len >> wid >> hei;
-    int n;
-    cin >> n;
-    vector<pair<int, int>> arr;
-    for(int i=0 ; i<n ; i++) {
-        int a,b;
-        cin >> a >> b;
-        arr.push_back(make_pair(a,b));
-    }
+vector <pii> v;
+ll length, width, height;
+int N;
 
-    long long ans=0;
-    long long before=0;
-    for(int i=n-1 ; i>=0 ; i--) {
-        before <<= 3; // before의 개수를 2^3만큼 늘려준다.
-        long long pc = (long long) (len >> i) * (wid >> i) * (hei >> i) - before;
-        // 박스를 2^i x 2^i x 2^i만큼 분할해 주고, 전에 박스를 채웠던 큐브의 개수(before)만큼 빼 준다.
-        // ex) 4 x 4 x 8이기때문에 4 x 4 x 4로 분할하면 1 x 1 x 2 = 2개가 됨
-        long long nc = min((long long) arr[i].second, pc);
-       
-        before += nc;
-        ans += nc;
-    }
+bool cmp(pii a, pii b){
+    return a.first > b.first ? true : false;
+}
+
+int main(){
+    ll answer = 0, before = 0;
     
-    if(before == (long long) len * wid * hei) cout << ans;
-    else cout << -1;
+    cin >> length >> width >> height >> N;
+    v.resize(N);
+    for(int i = 0; i < N; i++) cin >> v[i].first >> v[i].second;
+    sort(v.begin(), v.end(), cmp);
+
+    for(int i = 0; i < N; i++){
+        ll len = v[i].first;
+        ll count = v[i].second;
+        before <<= 3;
+        ll cnt = (length >> len) * (width >> len) * (height >> len) - before;
+        cnt = min(cnt, count);
+        before += cnt, answer += cnt;
+    }
+
+    if(before != length * width * height) cout << -1 << '\n', exit(0);
+    cout << answer << '\n';
 }
