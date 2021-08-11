@@ -1,39 +1,44 @@
 #include <iostream>
-#include <vector>
-#include <map>
+#define MAX 2188
 using namespace std;
 
-vector <vector<int>>v;
-map <int, int> m;
+int board[MAX][MAX];
+int answer[3] = {0, };
 int N;
 
-void devide(int x, int y, int size){
-    int pivot = v[x][y];
-    for(int i = x; i < x + size; i++){
-        for(int j = y; j < y + size; j++){
-            if(v[i][j] != pivot) {
-                int div = size / 3;
-                for(int a = x; a < x + size; a += div){
-                    for(int b = y; b < y + size; b += div){
-                        devide(a,b,div);
-                    }
-                }
-                return;
-            }
+bool chk_board(int x, int y, int len){
+    int pivot = board[x][y];
+
+    for(int i = x; i < x + len; i++){
+        for(int j = y; j < y + len; j++){
+            if(pivot != board[i][j]) return false;
         }
     }
-    m[pivot]++;
+
+    return true;
+}
+
+void foo(int x, int y, int len){
+    if(len == 1 || chk_board(x, y, len)) {
+        int ret = ++board[x][y];
+        answer[ret]++;
+        return;
+    }
+
+    int tmp = len / 3;
+    for(int i = x; i < x + len; i += tmp){
+        for(int j = y; j < y + len; j += tmp){
+            foo(i, j, tmp);
+        }
+    }
 }
 
 int main(){
-    m[-1] = 0, m[0] = 0, m[1] = 0;
     cin >> N;
-    cin.ignore();
-    v.resize(N);
     for(int i = 0; i < N; i++){
-        v[i].resize(N);
-        for(int j = 0; j < N; j++) cin >> v[i][j];
+        for(int j = 0; j < N; j++) cin >> board[i][j];
     }
-    devide(0, 0, N);
-    for(auto it : m) cout << it.second << '\n';
+
+    foo(0, 0, N);
+    cout << answer[0] << '\n' <<  answer[1] << '\n' << answer[2] << '\n';
 }
