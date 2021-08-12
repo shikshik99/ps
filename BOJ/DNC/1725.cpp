@@ -14,18 +14,19 @@ ll foo(int start, int end){
     int mid = (start + end) / 2;
     ll ret = max(foo(start, mid), foo(mid + 1, end));
 
-    ll garo = 1, left = mid, right = mid, sero = arr[mid];
+    int left = mid, right = mid;
+    ll garo = 1, sero = arr[mid];
     ret = max(ret, sero);
+
     while(start < left || right < end){
         garo++;
-        ll lvalue = arr[left - 1];
-        ll rvalue = arr[right + 1];
-        if(right < end && (left == start || rvalue >= lvalue)){
-            sero = min(sero, arr[++right]);
-        }
+        ll lvalue = start < left ? arr[left - 1] : -1;
+        ll rvalue = right < end ? arr[right + 1] : -1;
+
+        if(rvalue >= lvalue) sero = min(sero, arr[++right]);
         else sero = min(sero, arr[--left]);
 
-        ret = max(ret, sero * garo);
+        ret = max(ret, garo * sero);
     }
 
     return ret;
