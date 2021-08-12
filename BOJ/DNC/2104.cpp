@@ -12,24 +12,25 @@ ll foo(int start, int end){
     
     int mid = (start + end) / 2;
     ll ret = max(foo(start, mid), foo(mid + 1, end));
-    
-    ll left = mid, right = mid, minimum = arr[mid], psum = arr[mid];
-    while(left > start || right < end){
-        ll lvalue = arr[left - 1];
-        ll rvalue = arr[right + 1];
-        if(right < end  && (rvalue >= lvalue || left == start)){
+
+    int left = mid, right = mid;
+    ll psum = arr[mid], minimum = arr[mid];
+    while(start < left || right < end){
+        ll lvalue = left > start ? arr[left - 1] : -1;
+        ll rvalue = right < end ? arr[right + 1] : -1;
+        if(rvalue >= lvalue){
             psum += arr[++right];
-            minimum = min(minimum, arr[right]);
+            minimum = minimum < arr[right] ? minimum : arr[right];
         }
         else{
             psum += arr[--left];
-            minimum = min(minimum, arr[left]);
-        }        
-
+            minimum = minimum < arr[left] ? minimum : arr[left];
+        }
+        
         ret = max(ret, minimum * psum);
     }
 
-    return ret;    
+    return ret;
 }
 
 int main(){
