@@ -1,31 +1,43 @@
 #include <iostream>
-#include <vector>
-#include <string>
+#define MAX 6562
 using namespace std;
-    
-int N;
-vector <string>v;
 
-void DNC(int x, int y, int size){
-    int nsize = size/3;
-    if(size > 3){
-    for(int i = x; i < x + size; i += nsize){
-        for(int j = y; j < y + size; j += nsize){
-            DNC(i, j, nsize);
+char board[MAX][MAX];
+int N;
+
+void foo(int x, int y, int depth){
+    if(depth == 3){
+        for(int i = x; i < x + 3; i++){
+            for(int j = y; j < y + 3; j++){
+                if(i == x + 1 && j == y + 1) continue;
+                board[i][j] = '*';
+            }
         }
+        return;
     }
-    }
-    for(int i = x + nsize; i < x + nsize * 2; i++){
-        for(int j = y + nsize; j < y + nsize * 2; j++){
-            v[i][j] = ' ';
+
+    int tmp = depth / 3;
+    for(int i = x; i < x + depth; i += tmp){
+        for(int j = y; j < y + depth; j += tmp){
+            if(i == x + tmp && j == y + tmp) continue;
+            foo(i, j, tmp);
         }
     }
 }
 
 int main(){
     cin >> N;
-    v.resize(N);
-    for(int i = 0; i < N; i++)v[i].resize(N, '*');
-    DNC(0,0,N);
-    for(auto it : v) cout << it << '\n';
-}
+    for(int i = 0; i < N; i++){
+        for(int j = 0; j < N; j++){
+            board[i][j] = ' ';
+        }
+    }
+    foo(0, 0, N);
+
+    for(int i = 0; i < N; i++){
+        for(int j = 0; j < N; j++){
+            cout << board[i][j];
+        }
+        cout << '\n';
+    }
+}  
