@@ -3,28 +3,34 @@
 #include <algorithm>
 using namespace std;
 
-vector <int>v;
-int N, C;
+vector<int> v;
+int N, M;
 
-int foo(){
-    int l = 1, r = v[N-1], mid, ans;
-    while(l <= r) {
-        int cnt = 1;
-        int pivot = v[0];
-        mid = (l+r)/2;
-        for(int i = 1; i < N; i++){
-            if(v[i] - pivot >= mid) { cnt++; pivot = v[i];}
-        }
-        if(cnt >= C) {ans = mid; l = mid + 1;}
-        else r = mid - 1;
+bool possible(int tmp){
+    int cnt = 1;
+    int dist = v[0];
+    int idx = 0;
+    while((idx = lower_bound(v.begin(), v.end(), tmp + dist) - v.begin()) < N){
+        cnt++;
+        dist = v[idx];
     }
-    return ans;
+
+    return cnt >= M ? true : false;
 }
 
 int main(){
-    cin >> N >> C;
+    cin >> N >> M;
     v.resize(N);
     for(int i = 0; i < N; i++) cin >> v[i];
+
     sort(v.begin(), v.end());
-    cout << foo();
+    
+    int lo = 0, hi = v[N - 1];
+    while(lo + 1 < hi){
+        int mid = (lo + hi) / 2;
+        if(possible(mid)) lo = mid;
+        else hi = mid;
+    }
+
+    cout << lo << '\n';
 }
