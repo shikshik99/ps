@@ -1,34 +1,40 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
+#define MAX 10001
 using namespace std;
-#define ll long long
+using ll = long long;
 
-vector <ll>v;
-ll N, M;
+int arr[MAX];
+int N, M;
 
-ll foo(){
-    ll l = 0, r = M, mid, sum;
-    while(l <= r){
-        mid = (l+r)/2;
-        sum = 0;
-        for(int i = 0; i < N; i++){
-            if(v[i] < mid) sum += v[i];
-            else sum += mid;
-        }
-        if(sum > M) r = mid - 1;
-        else l = mid + 1;
+ll get_sum(int tmp){
+    ll ret = 0;
+    for(int i = 0; i < N; i++){
+        if(arr[i] <= tmp) ret += arr[i];
+        else ret += tmp;
     }
-    return l - 1;
+
+    return ret; 
 }
 
 int main(){
-    ll tmp = 0, ma = 0;
+    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+
+    int tmp = 0;
     cin >> N;
-    v.resize(N);
-    for(int i = 0; i < N; i++) {cin >> v[i]; tmp += v[i]; ma = max(v[i],ma);}
+    for(int i = 0; i < N; i++) cin >> arr[i], tmp = tmp > arr[i] ? tmp : arr[i];
     cin >> M;
-    if(M >= tmp) {cout << ma; return 0;}
-    ll ans = foo();
-    cout << ans;
+
+    ll sum = get_sum(tmp);
+    
+    if(sum <= M) cout << tmp << '\n', exit(0);
+    
+    int lo = 0, hi = M;
+    while(lo + 1 < hi){
+        int mid = (lo + hi) / 2;
+        sum = get_sum(mid);
+        if(sum > M) hi = mid;
+        else lo = mid;
+    }
+
+    cout << lo << '\n';
 }
