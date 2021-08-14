@@ -1,41 +1,32 @@
 #include <iostream>
-#include <vector>
+#define MAX 100001
 using namespace std;
-#define ll long long
 
-ll n, m, sum;
-ll l = 0, r = 0;
-vector <int>v;
+int arr[MAX];
+int N, M;
 
-ll foo(){
-    ll cnt = 0, mid = 0;
-    while(l <= r){
-        cnt = 1;
-        sum = 0;
-        mid = (l+r)/2;
-        for(ll i = 0; i < n; i++){
-            if(sum+v[i] > mid){
-                cnt++; sum = 0;
-            }
-            sum += v[i];       
-        }
-        if(cnt > m) l = mid + 1;
-        else r = mid - 1;
+bool possible(int len){
+    int cnt = 0;
+    int sum = 0;    
+    for(int i = 0; i < N; i++){
+        if(arr[i] > len) return true;
+        if(sum + arr[i] > len) cnt++, sum = arr[i];
+        else sum += arr[i];
     }
-    return l;
+
+    return cnt >= M ? true : false;
 }
 
 int main(){
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
+    cin >> N >> M;
+    for(int i = 0; i < N; i++) cin >> arr[i];
 
-    cin >> n >> m;
-    v.resize(n);
-    for(ll i = 0; i < n; i++){
-        cin >> v[i];
-        r += v[i];
-        if(l < v[i]) l = v[i];
+    int lo = 0, hi = 1000000001;
+    while(lo + 1 < hi){
+        int mid = (lo + hi) / 2;
+        if(possible(mid)) lo = mid;
+        else hi = mid;
     }
-    ll ans = foo();
-    cout << ans;
+
+    cout << hi << '\n';
 }
