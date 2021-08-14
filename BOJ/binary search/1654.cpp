@@ -1,28 +1,33 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
+#include <cmath>
+#define MAX 10001
+#define HI pow(2, 31)
 using namespace std;
-#define ui long long
+using ll = long long;
 
-vector <ui>v;
-ui mi = 10000000001, K, N;
+ll arr[MAX];
+int N, M;
 
-ui foo(){
-    ui l = 1, r = mi, mid, cnt;
-    while(l<=r){
-        mid = (l+r)/2;
-        cnt = 0;
-        for(int i = 0; i < K; i++) cnt += (v[i]/mid);
-        if(cnt < N) r = mid - 1;
-        else l = mid + 1;
+bool possible(ll tmp){
+    int cnt = 0;
+    for(int i = 0; i < N; i++){
+        cnt += (arr[i] / tmp);
     }
-    return l-1;
+
+    return cnt >= M ? true : false;
 }
 
 int main(){
-    cin >> K >> N;
-    v.resize(K);
-    for(int i = 0; i < K; i++){cin >> v[i];}
-    ui ans = foo();
-    cout << ans;
+    cin >> N >> M;
+    
+    for(int i = 0; i < N; i++) cin >> arr[i];
+
+    ll lo = 0, hi = HI;
+    while(lo + 1 < hi){
+        ll mid = (lo + hi) / 2;
+        if(possible(mid)) lo = mid;
+        else hi = mid;
+    }
+
+    cout << lo << '\n';
 }
