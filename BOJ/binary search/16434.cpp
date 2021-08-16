@@ -18,7 +18,7 @@ bool possible(ll mid, ll ATK){
         if(num == 1){ // 몬스터
             int monster_atk = tmp.first;
             int monster_hp = tmp.second;
-            ll dmg = ((monster_hp - 1) / atk) * monster_atk; // 딱 나눠 떨어지는 경우에는 떄리는 순간 죽기 때문에 -1 해줌(맞는 횟수가 1 줄어든다)
+            ll dmg = ((monster_hp - 1) / atk) * monster_atk; // 딱 나눠 떨어지는 경우에는 때리는 순간 죽기 때문에 -1 해줌(맞는 횟수가 1 줄어든다)
             if(hp - dmg <= 0) return false;
             hp -= dmg;
         }
