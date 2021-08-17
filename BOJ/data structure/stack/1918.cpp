@@ -4,44 +4,29 @@
 #include <map>
 using namespace std;
 
-stack <char>s;
-map <char, int>m;
+map <char, int> m;
 
 int main(){
-    m['('] = 3, m[')'] = 3, m['*'] = 2, m['/'] = 2, m['+'] = 1, m['-'] = 1;
-    string str, answer;
+    m['+'] = 1, m['-'] = 1, m['*'] = 2, m['/'] = 2;
+
+    string str;
     cin >> str;
+
+    stack <char> st;
     for(int i = 0; i < str.length(); i++){
-        if(str[i] >= 'A' && str[i] <= 'Z') answer += str[i];    
-        else if (!s.empty()) {
-            if(str[i] == ')'){
-                while(!s.empty()){
-                    if(s.top() == '(') { s.pop(); break;}
-                    else answer += s.top(), s.pop();
-                }
-            }
-            else if(str[i] == '(') s.push(str[i]);
-            else if(m[s.top()] == m[str[i]]) {
-                while(!s.empty() && m[s.top()] >= m[str[i]]) {
-                    if(s.top() == '(') break;
-                    answer += s.top(), s.pop();
-                }
-                s.push(str[i]);
-            }
-            else if(m[s.top()] > m[str[i]]) {
-                while(!s.empty() && m[s.top()] >= m[str[i]]) {
-                    if(s.top() == '(') break;
-                    answer += s.top(), s.pop();
-                }
-                s.push(str[i]);
-            }
-            else s.push(str[i]);
+        if(str[i] >= 'A' && str[i] <= 'Z') cout << str[i];
+        else if(str[i] == '(') st.push(str[i]);
+        else if(str[i] == ')') {
+            while(!st.empty() && st.top() != '(') cout << st.top(), st.pop();
+            st.pop();
         }
-        else if(s.empty()) s.push(str[i]);
+        else{
+            if(st.empty() || st.top() == '(') st.push(str[i]);
+            else {
+                while(!st.empty() && st.top() != '(' && m[st.top()] >= m[str[i]]) cout << st.top(), st.pop();
+                st.push(str[i]);
+            }
+        }
     }
-    while(!s.empty()){
-        if(s.top() == '(' || s.top() == ')') s.pop();
-        else answer += s.top(), s.pop();
-    }
-    cout << answer;
+    while(!st.empty()) cout << st.top(), st.pop();
 }
