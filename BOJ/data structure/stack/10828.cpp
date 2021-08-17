@@ -1,50 +1,65 @@
 #include <iostream>
-#include <stack>
 #include <string>
 using namespace std;
 
-stack<int> s;
-int N;
+struct node{
+    node *left = NULL;
+    node *right = NULL;
+    int num;
+    node(node *l, node *r, int tmp) : left{l}, right{r}, num{tmp} {}
+};
 
-void cmd(int flag, int num){
-    switch (flag)
-    {
-    case 0:
-        s.push(num);
-        break;
-    case 1:
-        if(s.empty()) cout << -1 << '\n';
-        else cout << s.top() << '\n', s.pop();
-        break;
-    case 2:
-        cout << s.size() << '\n';
-        break;
-    case 3:
-        cout << s.empty() << '\n';
-        break;
-    case 4:
-        if(s.empty()) cout << -1 << '\n';
-        else cout << s.top() << '\n';
-        break;
-    default:
-        break;
+node *tail = NULL;
+int cnt = 0;
+
+void push(int num){
+    if(tail == NULL) tail = new node(NULL, NULL, num);
+    else {
+        node *tmp = new node(tail, NULL, num);
+        tail->right = tmp;
+        tail = tmp;
     }
+
+    cnt++;
+}
+
+void pop(){
+    if(!cnt){
+        cout << -1 << '\n'; return;
+    }
+    node *tmp = tail;
+    tail = tail->left;
+    cout << tmp->num << '\n';
+    
+    delete tmp;
+    cnt--;
+}
+
+void size(){
+    cout << cnt << '\n';
+}
+
+void empty(){
+    cout << (!cnt ? 1 : 0) << '\n';
+}
+
+void top(){
+    if(!cnt) cout << -1 << '\n';
+    else cout << tail->num << '\n';
 }
 
 int main(){
+    int N;
     cin >> N;
-    string str;
-    int flag, num;   
+
+    string cmd;
+    int num;
     while(N--){
-        cin >> str;
-        if(str == "push") {
-            cin >> num;
-            flag = 0;
-        }
-        else if(str == "pop") flag = 1;
-        else if(str == "size") flag = 2;
-        else if(str == "empty") flag = 3;
-        else if(str == "top") flag = 4;
-        cmd(flag, num);
+        cin >> cmd;
+        if(cmd == "push") cin >> num, push(num);
+        else if(cmd == "pop") pop();
+        else if(cmd == "size") size();
+        else if(cmd == "empty") empty();
+        else if(cmd == "top") top();
     }
 }
