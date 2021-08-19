@@ -5,28 +5,29 @@
 using namespace std;
 
 map <char, int> m;
+stack <char> s;
 
 int main(){
     m['+'] = 1, m['-'] = 1, m['*'] = 2, m['/'] = 2;
-
     string str;
     cin >> str;
-
-    stack <char> st;
-    for(int i = 0; i < str.length(); i++){
-        if(str[i] >= 'A' && str[i] <= 'Z') cout << str[i];
-        else if(str[i] == '(') st.push(str[i]);
-        else if(str[i] == ')') {
-            while(!st.empty() && st.top() != '(') cout << st.top(), st.pop();
-            st.pop();
+    
+    int len = str.length();
+    for(int i = 0; i < len; i++){
+        if(str[i] >= 'A' && str[i] <= 'Z') {
+            cout << str[i];
+            continue;
         }
-        else{
-            if(st.empty() || st.top() == '(') st.push(str[i]);
-            else {
-                while(!st.empty() && st.top() != '(' && m[st.top()] >= m[str[i]]) cout << st.top(), st.pop();
-                st.push(str[i]);
-            }
+        if(str[i] == '(') s.push(str[i]);
+        else if(str[i] == ')'){
+            while(!s.empty() && s.top() != '(') cout << s.top(), s.pop();
+            s.pop();
+        }
+        else {
+            while(!s.empty() && s.top() != '(' && m[s.top()] >= m[str[i]]) cout << s.top(), s.pop();
+            s.push(str[i]);
         }
     }
-    while(!st.empty()) cout << st.top(), st.pop();
+
+    while(!s.empty()) cout << s.top(), s.pop();
 }
