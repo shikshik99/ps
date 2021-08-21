@@ -1,34 +1,40 @@
 #include <iostream>
 #include <queue>
+#define MAX 101
 using namespace std;
-#define pii pair<int,int>
+using pii = pair <int, int>;
 
-int N, M, maze[101][101];
-int chk[101][101];
-queue <pii>q;
+int arr[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+queue <pair<int, pii>> q;
+int board[MAX][MAX];
+bool chk[MAX][MAX] = {false, };
+int N, M;
 
-void BFS(){
-    pii tmp;
-    int arr[4][2] = {{1, 0}, {-1, 0}, {0, -1} , {0, 1}};
-    int cnt;
-    q.push({0,0});
+int BFS(int x, int y){
+    chk[x][y] = true;
+    q.push({0, {x, y}});
     while(!q.empty()){
-        tmp = q.front(), q.pop(), cnt = chk[tmp.first][tmp.second];
+        pii tmp = q.front().second;
+        int cnt = q.front().first + 1;
+        q.pop();
         for(int i = 0; i < 4; i++){
-            tmp.first += arr[i][0], tmp.second += arr[i][1];
-            if(tmp.first >=0 && tmp.first < N && tmp.second >= 0 && tmp.second < M && !chk[tmp.first][tmp.second] && maze[tmp.first][tmp.second]){
-                q.push(tmp), chk[tmp.first][tmp.second] = cnt + 1;
-            }
-            tmp.first -= arr[i][0], tmp.second -= arr[i][1];
+            int dx = tmp.first + arr[i][0];
+            int dy = tmp.second + arr[i][1];
+            if(dx == N - 1 && dy == M - 1) return cnt + 1;
+            if(dx < 0 || dx >= N || dy < 0 || dy >= M || chk[dx][dy] || !board[dx][dy]) continue;
+            chk[dx][dy] = true;
+            q.push({cnt, {dx, dy}});
         }
     }
+
+    return 0;
 }
 
 int main(){
     cin >> N >> M;
     for(int i = 0; i < N; i++){
-        for(int j = 0; j < M; j++) scanf("%1d", &maze[i][j]);
+        for(int j = 0; j < M; j++) scanf("%1d", &board[i][j]);
     }
-    BFS();
-    cout << chk[N-1][M-1] + 1;
+
+    cout << BFS(0, 0) << '\n';
 }
