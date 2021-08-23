@@ -1,48 +1,46 @@
 #include <iostream>
-#include <cstring>
 #include <queue>
 #include <string>
 #include <algorithm>
+#define MAX 1000001
 using namespace std;
-using psi = pair<string, int>;
 
-bool chk[1000001][11];
-string str;
+bool chk[MAX][11] = {false, };
 int K;
-
-string SWAP(string tmp, int i, int j){
-    swap(tmp[i], tmp[j]);
-    return tmp;
-}
+string N;
 
 int BFS(){
-    int answer = -1;
-    memset(chk, false, sizeof(chk));
-    queue <psi> q;
-    q.push({str, 0});
-    chk[stoi(str)][0] = true;
-
-    while(!q.empty()){
-        string tmp = q.front().first, swp;
-        int cnt = q.front().second + 1;
-        q.pop();
-        for(int i = 0; i < tmp.length(); i++){
-            for(int j = i + 1; j < tmp.length(); j++){
-                swp = SWAP(tmp, i, j);
-                if(swp[0] == '0' || chk[stoi(swp)][cnt]) continue;
-                if(cnt == K) answer = max(answer, stoi(swp));
-                else{
-                    chk[stoi(swp)][cnt] = true;
-                    q.push({swp, cnt});
+    queue <string> q;
+    q.push(N);
+    chk[stoi(N)][0] = true;
+    
+    int ret = -1;
+    int len = N.length();
+    int cnt = 0;
+    while(!q.empty() && cnt < K){
+        int qsize = q.size();
+        cnt++;
+        while(qsize--){
+            string str = q.front();
+            q.pop();
+            for(int i = 0; i < len; i++){
+                for(int j = i + 1; j < len; j++){
+                    string next = str;
+                    swap(next[i], next[j]);
+                    int num = stoi(next);
+                    if(chk[num][cnt] || next[0] == '0') continue;
+                    if(cnt == K) ret = max(ret, num);
+                    chk[num][cnt] = true;
+                    q.push(next);
                 }
             }
         }
     }
-
-    return answer;
+    
+    return ret;
 }
 
 int main(){
-    cin >> str >> K;
-    cout << BFS();
+    cin >> N >> K;
+    cout << BFS() << '\n';
 }
