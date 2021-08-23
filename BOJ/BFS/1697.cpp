@@ -1,33 +1,36 @@
 #include <iostream>
 #include <queue>
+#define MAX 100001
 using namespace std;
 
-int N, K, cnt = 0;
-queue <int>q1, q2;
-bool visit[100001] = {false,};
+int N, K;
+bool chk[MAX];
+
+int BFS(){
+    queue <int> q;
+    q.push(N);
+    chk[N] = true;
+    
+    int ret = 0;
+    while(!q.empty()){
+        int qsize = q.size();
+        while(qsize--){
+            int num = q.front();
+            q.pop();
+            if(num == K) return ret;
+            int jump = num * 2;
+            int up = num + 1;
+            int down = num - 1;
+            if(jump < MAX && !chk[jump]) q.push(jump), chk[jump] = true;
+            if(up < MAX && !chk[up]) q.push(up), chk[up] = true;
+            if(down >= 0 && !chk[down]) q.push(down), chk[down] = true;
+        }
+
+        ret++;
+    }
+}
 
 int main(){
     cin >> N >> K;
-    q1.push(N);
-    while(1){
-        if(!q1.empty()){
-            while(!q1.empty()){
-                if(q1.front() == K) {cout << cnt; return 0;}
-                if(q1.front() * 2 <= 100000 && !visit[q1.front() * 2]) q2.push(q1.front() * 2), visit[q1.front() * 2] = true;
-                if(q1.front() + 1 <= 100000 && !visit[q1.front() + 1]) q2.push(q1.front() + 1), visit[q1.front() + 1] = true;
-                if(q1.front() - 1 >= 0 && !visit[q1.front() - 1]) q2.push(q1.front() - 1), visit[q1.front() - 1] = true;
-                q1.pop();
-            }
-        }
-        else if(!q2.empty()){
-            while(!q2.empty()){
-                if(q2.front() == K) {cout << cnt; return 0;}
-                if(q2.front() * 2 <= 100000 && !visit[q2.front() * 2]) q1.push(q2.front() * 2), visit[q2.front() * 2] = true;
-                if(q2.front() + 1 <= 100000 && !visit[q2.front() + 1]) q1.push(q2.front() + 1), visit[q2.front() + 1] = true;
-                if(q2.front() - 1 >= 0 && !visit[q2.front() - 1]) q1.push(q2.front() - 1), visit[q2.front() - 1] = true;
-                q2.pop();
-            }
-        }
-        cnt++;
-    }
+    cout << BFS() << '\n';
 }
