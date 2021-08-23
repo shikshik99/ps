@@ -1,11 +1,13 @@
 #include <iostream>
+#include <cstring>
 #include <cmath>
+#define MAX 16
 using namespace std;
 
-int arr[16];
+int arr[MAX];
 int N;
 
-bool chk(int depth){
+bool possible(int depth){
     for(int i = 0; i < depth; i++){
         if(arr[i] == arr[depth]) return false;
         if(abs(i - depth) == abs(arr[i] - arr[depth])) return false;
@@ -16,18 +18,19 @@ bool chk(int depth){
 
 int foo(int depth){
     if(depth == N) return 1;
-    int answer = 0;
+    int ret = 0;
     
     for(int i = 0; i < N; i++){
         arr[depth] = i;
-        if(chk(depth)) answer += foo(depth + 1);
+        if(possible(depth)) ret += foo(depth + 1);
     }
 
-    return answer;
+    return ret;
 }
 
 int main(){
-    for(int i = 0; i < 16; i++) arr[i] = -1;
     cin >> N;
-    cout << foo(0);
+    memset(arr, -1, sizeof(arr));
+
+    cout << foo(0) << '\n';
 }
