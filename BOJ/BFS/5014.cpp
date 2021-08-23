@@ -1,35 +1,40 @@
 #include <iostream>
 #include <queue>
-#include <cstring>
+#define MAX 1000001
 using namespace std;
-#define pii pair<int, int>
 
-vector <int> ud;
-int F, S, G, U, D;
-int answer = -1;
-bool chk[1000001];
+bool chk[MAX] = {false, };
+int N, S, G, U, D;
 
-void foo(){
-    memset(chk, false, sizeof(chk));
-    queue<pii> q;
-    q.push({S, 0});
+int BFS(){
+    queue <int> q;
+    q.push(S);
+    chk[S] = true;
+
+    int ret = 0;
     while(!q.empty()){
-        pii tmp = q.front(); q.pop();
-        if(tmp.first == G) {answer = tmp.second; return;}
-        for(int i = 0; i < 2; i++){
-            int level = tmp.first + ud[i];
-            int distance = tmp.second + 1;
-            if(level <= 0 || level > F || chk[level]) continue;
-            q.push({level, distance});
-            chk[level] = true;
+        int qsize = q.size();
+        while(qsize--){
+            int num = q.front();
+            if(num == G) return ret;
+            q.pop();
+            int up = num + U;
+            int down = num - D;
+            if(up <= N && !chk[up]) q.push(up), chk[up] = true;
+            if(down >= 1 && !chk[down]) q.push(down), chk[down] = true;
         }
+        ret++;
     }
+
+    return -1;
 }
 
 int main(){
-    cin >> F >> S >> G >> U >> D;
-    ud.push_back(U), ud.push_back(-D);
-    foo();
-    if(answer == -1) cout << "use the stairs";
-    else cout << answer;
+    cin >> N >> S >> G >> U >> D;
+
+    if(S == G) cout << 0 << '\n', exit(0);
+
+    int answer = BFS();
+    if(answer == -1) cout << "use the stairs\n";
+    else cout << answer << '\n';
 }
