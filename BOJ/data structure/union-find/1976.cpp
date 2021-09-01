@@ -1,37 +1,42 @@
 #include <iostream>
+#include <cstring>
+#define MAX 201
 using namespace std;
 
-int arr[201];
+int parent[MAX];
+int N, M;
 
 int find(int a){
-    if(arr[a] == a) return a;
-    return arr[a] = find(arr[a]);
+    if(parent[a] < 0) return a;
+    return parent[a] = find(parent[a]);
 }
 
-void UNION(int a, int b){
-    arr[find(a)] = find(b);
+void merge(int a, int b){
+    a = find(a);
+    b = find(b);
+    if(a == b) return ;
+    parent[a] = b;
 }
 
 int main(){
-    int n, m;
-    cin >> n >> m;
-    
-    for(int i = 1; i <= n; i++) arr[i] = i;
+    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    memset(parent, -1, sizeof(parent));
+    cin >> N >> M;
 
-    int tmp;
-    for(int i = 1; i <= n; i++){ 
-        for(int j = 1; j <= n; j++){
-            cin >> tmp;
-            if(tmp) UNION(i, j);
+    int num;
+    for(int i = 1; i <= N; i++){
+        for(int j = 1; j <= N; j++){
+            cin >> num;
+            if(num) merge(i, j);        
         }
     }
 
-    cin >> tmp;
-    int idx = find(tmp); m--;
-    while(m--){
-        cin >> tmp;
-        if(idx != find(tmp)) cout << "NO\n", exit(0);
+    cin >> num, M--;
+    int ans = find(num);
+    while(M--){
+        cin >> num;
+        if(find(num) != ans) cout << "NO\n", exit(0);
     }
-
+    
     cout << "YES\n";
 }
