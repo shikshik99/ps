@@ -40,16 +40,15 @@ void add_str(){
 }
 
 void solve(int depth){
+    add_str();
     if(depth == N) return;
     int fi = arr[depth].first;
     int se = arr[depth].second;
     chk[fi] = true;
     chk[se] = true;
-    add_str();
     solve(depth + 1);
     chk[fi] = false;
     chk[se] = false;
-    add_str();
     solve(depth + 1);
 }
 
