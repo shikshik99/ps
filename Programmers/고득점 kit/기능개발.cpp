@@ -1,33 +1,28 @@
-#include <string>
-#include <queue>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
-queue <int> q1,q2;
+
+queue <int> q;
 
 vector<int> solution(vector<int> progresses, vector<int> speeds) {
     vector<int> answer;
-    vector<int> tmp, tmp2;
-    for(int i = 0; i < progresses.size(); i++) {q1.push(progresses[i]); q2.push(speeds[i]);}
     
-    int cnt = 0;
-    while(!q1.empty() && !q2.empty()){
-        if(!q1.empty() && q1.front() >= 100){
-            while(!q1.empty() && q1.front() >= 100){
-                q1.pop(); q2.pop();
-                cnt++;
-            }
-            answer.push_back(cnt); cnt = 0;
-            continue;
-        }
-        else{
-            tmp.clear(); tmp2.clear();
-            while(!q1.empty()){
-                tmp.push_back(q1.front() + q2.front());  tmp2.push_back(q2.front());
-                q1.pop(); q2.pop();
-            }
-            for(int i = 0; i < tmp.size(); i++) {q1.push(tmp[i]); q2.push(tmp2[i]);}
-        }
+    int len = progresses.size();
+    for(int i = 0; i < len; i++){
+        int day = 100 - progresses[i], tmp = 0;
+        if(day % speeds[i]) tmp = 1;
+        day = (day / speeds[i]) + tmp;
+        q.push(day);
     }
+    
+    int day = q.front();
+    while(!q.empty()){
+        int cnt = 0;
+        while(!q.empty() && day >= q.front()){
+            q.pop(), cnt++;
+        }
+        answer.push_back(cnt);
+        day = q.front();
+    }
+
     return answer;
 }

@@ -1,26 +1,31 @@
-#include <string>
-#include <queue>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
+using pii = pair <int, int>;
 
-int solution(int bridge_length, int weight, vector<int> truck_weights) {
-    int answer = 0, i = 0, bridge_weight = 0;
-    queue <pair<int,int>>q;
-    while(1){
-        if(answer - q.front().second == bridge_length){
-            bridge_weight -= q.front().first; q.pop();
+deque <pii> dq;
+queue <int> q;
+
+int solution(int bridge_length, int weight, vector<int> t) {
+    int answer = 0, curr_weight = 0;
+    
+    int len = t.size();
+    for(int i = 0; i < len; i++) q.push(t[i]);
+    
+    while(!q.empty() || !dq.empty()){
+        if(!dq.empty() && dq.front().second >= bridge_length) {
+            curr_weight -= dq.front().first;
+            dq.pop_front();
         }
-        while(i < truck_weights.size() && bridge_weight + truck_weights[i] <= weight){
-            q.push(make_pair(truck_weights[i], answer));
-            bridge_weight += truck_weights[i];
-            answer++; i++;
-            if(answer - q.front().second == bridge_length){
-                bridge_weight -= q.front().first; q.pop();
-            }
+        if(!q.empty() && dq.size() < bridge_length && curr_weight + q.front() <= weight){
+            dq.push_back({q.front(), 0});
+            curr_weight += q.front();
+            q.pop();
         }
-        if(i >= truck_weights.size() && q.empty()) break;
+        
+        len = dq.size();
+        for(int i = 0; i < len; i++) dq[i].second += 1;
         answer++;
     }
-    return answer + 1;
+    
+    return answer;
 }

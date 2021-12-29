@@ -1,40 +1,42 @@
-#include <string>
-#include <map>
-#include <algorithm>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
+using psi = pair<string, int>;
+using pii = pair<int, int>;
 
-bool cmp(pair<string,int> a,pair<string,int>b){
-    return a.second > b.second;
+bool cmp(psi a, psi b){
+    return a.second > b.second ? true : false;
 }
+
+bool cmp2(pii a, pii b){
+    if(a.second == b.second) return a.first < b.first ? true : false;
+    return a.second > b.second ? true : false;
+}
+
+map <string, int> play_time;
+vector <psi> genre_idx;
 
 vector<int> solution(vector<string> genres, vector<int> plays) {
     vector<int> answer;
-    map <string, int>m;
     
-    for(int i = 0; i < genres.size(); i++) {
-        if(m.count(genres[i])) m[genres[i]] += plays[i];
-        else m.insert(make_pair(genres[i], plays[i]));
+    int len = genres.size();
+    for(int i = 0; i < len; i++){
+        string str = genres[i];
+        play_time[str] += plays[i];
     }
     
-    vector <pair<string, int>>v(m.begin(), m.end());
+    vector <psi> v(play_time.begin(), play_time.end());
     sort(v.begin(), v.end(), cmp);
     
-    int best, second;
-    int bestidx, secondidx, i;
-    for(auto vit : v) {
-        best = second = bestidx = secondidx = -123456789;
-        for(i = 0; i < genres.size(); i++){
-            if(genres[i] == vit.first && best == -123456789) {best = plays[i]; bestidx = i; continue;}
-            if(genres[i] == vit.first && plays[i] > second){
-                second = plays[i]; secondidx = i;
-                if (best < second) {swap(best, second); swap(bestidx, secondidx);}
-            }
+    for(auto it : v) {
+        string genre = it.first;
+        vector <pii> tmp;
+        for(int i = 0; i < len; i++){
+            if(genres[i] == genre) tmp.push_back({i, plays[i]});
         }
-        if(secondidx == -123456789) answer.push_back(bestidx);
-        else {answer.push_back(bestidx); answer.push_back(secondidx);}
+        sort(tmp.begin(), tmp.end(), cmp2);
+        answer.push_back(tmp[0].first);
+        if(tmp.size() > 1) answer.push_back(tmp[1].first);
     }
     
-    return answer;
+    return answer; 
 }

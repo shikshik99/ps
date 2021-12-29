@@ -1,25 +1,22 @@
-#include <string>
-#include <stack>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
-stack <int>s;
+
+stack <int> s;
 
 vector<int> solution(vector<int> prices) {
-    vector<int> answer;
+    int len = prices.size();
     
-    int n  = prices.size();
-    answer.resize(n);
-    
-    for(int i = 0; i < n ;i++){
-        while(!s.empty() && prices[i] < prices[s.top()]){
+    vector<int> answer(len, 0);
+    for(int i = 0; i < len; i++) {
+        while(!s.empty() && prices[s.top()] > prices[i]){
             answer[s.top()] = i - s.top();
             s.pop();
         }
         s.push(i);
     }
+    
     while(!s.empty()){
-        answer[s.top()] = n - 1 - s.top();
+        answer[s.top()] = len - s.top() - 1;
         s.pop();
     }
     

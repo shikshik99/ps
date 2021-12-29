@@ -1,19 +1,25 @@
-#include <string>
-#include <queue>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
+using pii = pair<int, int>;
+
+priority_queue <int> pq;
+queue <pii> q;
 
 int solution(vector<int> priorities, int location) {
     int answer = 0;
-    queue <pair<int,int>>q;
-    priority_queue <int>pq;
-    for(int i = 0; i < priorities.size(); i++){pq.push(priorities[i]); q.push(make_pair(i, priorities[i]));}
     
-    pair<int,int> tmp;
+    int len = priorities.size();
+    for(int i = 0; i < len; i++) pq.push(priorities[i]), q.push({i, priorities[i]});
+    
     while(!q.empty()){
-        if(q.front().second == pq.top() && q.front().first == location){return answer + 1;}
-        else if(q.front().second == pq.top()) {q.pop(); pq.pop();answer++;}
-        else {tmp = q.front(); q.pop(); q.push(tmp);}
+        pii tmp = q.front();
+        q.pop();
+        if(tmp.second == pq.top()) {
+            pq.pop(), answer++;
+            if(tmp.first == location) return answer;
+        }
+        else q.push(tmp);
     }
+    
+    return answer;
 }
